@@ -4,6 +4,7 @@ import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home/Home';
 import Predict from './pages/Predict/Predict';
+import LarvaePredict from './pages/LarvaePredict/LarvaePredict';
 import About from './pages/About/About';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import Contact from './pages/Contact/Contact';
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/predict" element={<Predict />} />
+            <Route path="/larvae" element={<LarvaePredict />} />
             <Route path="/about" element={<About />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/contact" element={<Contact />} />

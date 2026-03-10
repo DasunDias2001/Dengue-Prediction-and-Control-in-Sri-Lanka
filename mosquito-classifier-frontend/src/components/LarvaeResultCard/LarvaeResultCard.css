@@ -1,0 +1,160 @@
+/* LarvaeResultCard.css — mirrors ResultCard.css styles */
+
+.result-card {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  margin-top: 24px;
+}
+
+.result-card.error {
+  border-color: #f5c6cb;
+  background: #fff5f5;
+}
+
+.result-card.error h3 {
+  color: #dc3545;
+  margin-bottom: 8px;
+}
+
+.result-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 20px;
+}
+
+.result-prediction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+
+.predicted-species {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.species-label {
+  font-size: 13px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.species-name {
+  font-size: 20px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.species-name.aegypti   { color: #dc3545; }
+.species-name.albopictus { color: #28a745; }
+
+.confidence-badge .confidence {
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.confidence.high {
+  background: #d4edda;
+  color: #155724;
+}
+
+.confidence.low {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.probabilities {
+  margin-bottom: 20px;
+}
+
+.probabilities h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 14px;
+}
+
+.probability-bar {
+  margin-bottom: 14px;
+}
+
+.probability-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #495057;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #e9ecef;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.progress-fill.aegypti    { background: #dc3545; }
+.progress-fill.albopictus { background: #28a745; }
+
+.warning-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.warning-box p {
+  font-size: 14px;
+  color: #856404;
+  margin: 0;
+}
+
+.species-info-box {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 18px 20px;
+  border-left: 4px solid #28a745;
+}
+
+.species-info-box h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 10px;
+}
+
+.species-info-box ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.species-info-box ul li {
+  font-size: 14px;
+  color: #495057;
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
