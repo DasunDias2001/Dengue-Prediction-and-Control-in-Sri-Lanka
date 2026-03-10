@@ -7,8 +7,9 @@ A deep learning project for classifying dengue mosquito species (Aedes aegypti v
 
 ## Features
 
-- 🦟 **Mosquito Classification**: Distinguish between Aedes aegypti and Aedes albopictus species
+- 🦟 **Mosquito Species Classification**: Distinguish between Aedes aegypti and Aedes albopictus species
 - 🧠 **Deep Learning Model**: TensorFlow/Keras-based CNN model
+- 🐛 **Mosquito Larvae Classification**: Identify larvae types (Aedes aegypti and Culex quinquefasciatus)
 - 🚀 **FastAPI Backend**: REST API for real-time predictions
 - 📊 **Complete Pipeline**: Data preparation, training, evaluation, and prediction
 - 📈 **Model Monitoring**: TensorBoard integration for training visualization
@@ -19,7 +20,8 @@ A deep learning project for classifying dengue mosquito species (Aedes aegypti v
 mosquito-classification/
 ├── backend/                    # FastAPI backend
 │   ├── app.py                 # Main API application
-│   ├── model_handler.py       # Model loading and prediction logic
+│   ├── model_handler.py       # Model loading and prediction logic (adult mosquitoes)
+│   ├── larvae_classifier.py   # Larvae classification logic
 │   ├── utils.py              # File handling utilities
 │   └── requirements.txt      # Backend dependencies
 ├── src/                       # Training pipeline source code
@@ -28,8 +30,12 @@ mosquito-classification/
 │   ├── train.py              # Training logic
 │   ├── evaluate.py           # Model evaluation
 │   └── predict.py            # Prediction utilities
-├── models/                    # Saved models and checkpoints
-├── data/                      # Processed datasets
+├── larvaemodal/              # Larvae classification models and training
+│   ├── models/              # Saved larvae models
+│   ├── data/                # Larvae dataset
+│   └── training/            # Larvae training scripts
+├── models/                    # Saved adult mosquito models and checkpoints
+├── data/                      # Processed adult mosquito datasets
 ├── results/                   # Evaluation results and plots
 ├── logs/                      # TensorBoard logs
 ├── uploads/                   # Temporary uploaded files (backend)
@@ -125,16 +131,25 @@ GET /model-info
 ```
 Returns information about the loaded model (classes, input size, etc.).
 
-**Predict Mosquito Species**:
+**Predict Mosquito Species** (Adult Mosquitoes):
 ```bash
 POST /predict
 Content-Type: multipart/form-data
 
 file: [image file]
 ```
-Upload an image file (jpg, jpeg, png, bmp, tiff) to get species prediction.
+Upload an image file (jpg, jpeg, png, bmp, tiff) to get species prediction for adult mosquitoes.
 
-**Example Response**:
+**Predict Mosquito Larvae Type**:
+```bash
+POST /predict-larvae
+Content-Type: multipart/form-data
+
+file: [image file]
+```
+Upload a larvae image file to identify the larvae type.
+
+**Example Response** (Adult Species):
 ```json
 {
   "success": true,
@@ -148,9 +163,23 @@ Upload an image file (jpg, jpeg, png, bmp, tiff) to get species prediction.
 }
 ```
 
+**Example Response** (Larvae Type):
+```json
+{
+  "success": true,
+  "predicted_class": "aedes_aegypti_larvae",
+  "confidence": 0.89,
+  "probabilities": {
+    "aedes_aegypti_larvae": 0.89,
+    "culex_quinquefasciatus_larvae": 0.11
+  },
+  "message": "Predicted as AEDES AEGYPTI LARVAE with 89.00% confidence"
+}
+```
+
 #### Using the API
 
-**With curl**:
+**Predict Adult Species with curl**:
 ```bash
 curl -X POST "http://localhost:8000/predict" \
      -H "accept: application/json" \
@@ -158,12 +187,30 @@ curl -X POST "http://localhost:8000/predict" \
      -F "file=@path/to/mosquito_image.jpg"
 ```
 
-**With Python**:
+**Predict Larvae Type with curl**:
+```bash
+curl -X POST "http://localhost:8000/predict-larvae" \
+     -H "accept: application/json" \
+     -H "Content-Type: multipart/form-data" \
+     -F "file=@path/to/larvae_image.jpg"
+```
+
+**With Python** (Adult Species):
 ```python
 import requests
 
 url = "http://localhost:8000/predict"
 files = {"file": open("mosquito_image.jpg", "rb")}
+response = requests.post(url, files=files)
+print(response.json())
+```
+
+**With Python** (Larvae Type):
+```python
+import requests
+
+url = "http://localhost:8000/predict-larvae"
+files = {"file": open("larvae_image.jpg", "rb")}
 response = requests.post(url, files=files)
 print(response.json())
 ```
@@ -189,20 +236,41 @@ python run_pipeline.py --mode predict --image path/to/mosquito.jpg --show
 
 ## Model Details
 
+### Adult Mosquito Classification
 - **Architecture**: Convolutional Neural Network (CNN)
 - **Input Size**: 224x224 pixels
 - **Classes**: 2 (aegypti, albopictus)
 - **Framework**: TensorFlow/Keras
 - **Preprocessing**: Image resizing and normalization
 
+### Mosquito Larvae Classification
+- **Architecture**: Convolutional Neural Network (CNN)
+- **Input Size**: 224x224 pixels
+- **Classes**: 2 (Aedes aegypti larvae, Culex quinquefasciatus larvae)
+- **Framework**: TensorFlow/Keras
+- **Preprocessing**: Image resizing and normalization
+
 ## Dataset
 
-The project expects a dataset structure like:
+### Adult Mosquito Dataset
+The project expects a dataset structure for adult mosquitoes like:
 ```
 Dataset/
 ├── raw/
 │   ├── aegypti/     # Aedes aegypti images
 │   └── albopictus/  # Aedes albopictus images
+├── train/           # Training split (created by pipeline)
+├── test/            # Test split (created by pipeline)
+└── val/             # Validation split (created by pipeline)
+```
+
+### Larvae Dataset
+The project expects a dataset structure for larvae like:
+```
+LarvaeDataset/
+├── raw/
+│   ├── aedes_aegypti_larvae/        # Aedes aegypti larvae images
+│   └── culex_quinquefasciatus_larvae/ # Culex quinquefasciatus larvae images
 ├── train/           # Training split (created by pipeline)
 ├── test/            # Test split (created by pipeline)
 └── val/             # Validation split (created by pipeline)
